@@ -4,7 +4,7 @@ import { useGlobalContext } from "../context";
 import { Navigate } from "react-router-dom";
 
 const Login = () => {
-  const { user } = useGlobalContext();
+  const { user, setUser } = useGlobalContext();
   const [loading, setLoading] = useState(false);
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
@@ -26,6 +26,7 @@ const Login = () => {
       setUsername("");
       setPassword("");
       setLoading(false);
+      setUser(true);
     } catch (error) {
       setLoading(false);
       console.log(error);

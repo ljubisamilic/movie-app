@@ -184,10 +184,12 @@ a { text-decoration: none;}
   right: 0px;
   padding: 10px;
   font-size: 20px;
-  border-bottom-left-radius: 20px;
   background: #79141c;
   cursor: pointer;
   z-index: 99;
+  border: none;
+  outline: none;
+  color: #fff;
 }
 .close:hover {
   opacity: 0.7;

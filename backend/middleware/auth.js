@@ -4,7 +4,7 @@ const jwt = require("jsonwebtoken");
 const auth = async (req, res, next) => {
   const authHeader = req.headers.authorization;
   if (!authHeader) {
-    return res.stats(401).json({ msg: "Authentication invalid" });
+    return res.status(401).json({ msg: "Authentication invalid" });
   }
 
   try {
@@ -13,7 +13,7 @@ const auth = async (req, res, next) => {
     req.user = user;
     next();
   } catch (error) {
-    return res.stats(401).json({ msg: "Authentication invalid" });
+    return res.status(401).json({ msg: "Authentication invalid" });
   }
 };
 

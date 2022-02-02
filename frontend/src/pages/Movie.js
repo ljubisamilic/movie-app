@@ -3,34 +3,77 @@ import axios from "axios";
 import { useParams } from "react-router-dom";
 import Loading from "../componets/Loading";
 import { FaStar } from "react-icons/fa";
+import { useGlobalContext } from "../context";
 
 const Movie = () => {
   const { id } = useParams();
-  const [loadgin, setLoading] = useState(true);
+  const { user } = useGlobalContext();
+  const [loading, setLoading] = useState(true);
+  const [favorite, setFavorite] = useState(false);
   const [movie, setMovie] = useState("");
+  let url = `http://localhost:5000/api/movie/${id}`;
+  if (user) {
+    url = `http://localhost:5000/api/movie/auth/${id}`;
+  }
   useEffect(() => {
     const getMovie = async () => {
       setLoading(true);
       try {
-        const response = await axios.get(
-          `http://localhost:5000/api/movie/${id}`
-        );
-        console.log("some");
+        const response = await axios.get(url, {
+          headers: { authorization: localStorage.getItem("token") },
+        });
         setMovie(response.data.movie);
+        setFavorite(response.data.movie.favorite);
         setLoading(false);
       } catch (error) {
         console.log(error);
         setLoading(false);
       }
     };
-    console.log("nesto");
     getMovie();
   }, [id]);
 
-  if (loadgin) {
+  const addToMyList = async (id) => {
+    if (user) {
+      await axios
+        .post(
+          "http://localhost:5000/api/mylist",
+          {
+            id,
+            original_title: movie.original_title,
+            overview: movie.overview,
+            poster_path: movie.poster_path,
+            release_date: movie.release_date,
+            vote_average: movie.vote_average,
+            favorite: true,
+          },
+          { headers: { authorization: localStorage.getItem("token") } }
+        )
+        .then((res) => setFavorite(res.data.favorite))
+        .catch((err) => console.log(err));
+    }
+  };
+
+  const removeFromMyList = async (id) => {
+    if (user) {
+      await axios
+        .delete(
+          `http://localhost:5000/api/mylist/${id}`,
+          {
+            headers: { authorization: localStorage.getItem("token") },
+          },
+          {}
+        )
+        .then((res) => setFavorite(res.data.favorite))
+        .catch((err) => console.log(err));
+    }
+  };
+
+  if (loading) {
     return <Loading />;
   }
   const {
+    movieId,
     genres,
     original_title,
     overview,
@@ -83,8 +126,15 @@ const Movie = () => {
             })}
           </p>
         </div>
-        <button className="btn">Add to favorites</button>
-        <button className="btn">Remove from favorites</button>
+        {!favorite ? (
+          <button className="btn" onClick={() => addToMyList(movieId)}>
+            Add to favorites
+          </button>
+        ) : (
+          <button className="btn" onClick={() => removeFromMyList(movieId)}>
+            Remove from favorites
+          </button>
+        )}
       </div>
     </section>
   );

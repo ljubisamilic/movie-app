@@ -1,10 +1,11 @@
 import React, { useState } from "react";
 import axios from "axios";
 import { useGlobalContext } from "../context";
-import { Navigate } from "react-router-dom";
+import { Navigate, useNavigate } from "react-router-dom";
 
 const Register = () => {
   const { user } = useGlobalContext();
+  const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
@@ -23,6 +24,7 @@ const Register = () => {
       setUsername("");
       setPassword("");
       setLoading(false);
+      navigate("/login");
     } catch (error) {
       setLoading(false);
       console.log(error);
