@@ -14,7 +14,7 @@ const MovieList = () => {
       setLoading(true);
       try {
         const response = await axios.get(
-          `http://localhost:5000/api/movie/?page=${page}`
+          `http://localhost:5000/api/movie/popular/?page=${page}`
         );
         if (response.data) {
           setMovise((movie) => {

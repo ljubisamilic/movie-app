@@ -365,3 +365,41 @@ a { text-decoration: none;}
 
 
 .form-container input::placeholder { color: #555 }
+
+/* alert */
+.alert {
+  display: none;
+}
+
+.show-true {
+  display: inline !important;
+}
+
+/* pagination */
+
+.pagination {
+  display: flex;
+  width: 1400px;
+  margin: 30px auto;
+  list-style: none;
+}
+.pagination li button {
+  padding: 20px;
+  background-color: rgb(25 30 42);
+  margin-right: 20px;
+  color: #fff;
+  transition: 0.5s ease;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  font-size: 18px;
+}
+
+.pagination li button:hover {
+  background-color: rgba(0, 0, 0, 0.12);
+  color: #007bff;
+}
+.active {
+  background-color: rgba(0, 0, 0, 0.12) !important;
+  color: #007bff !important;
+}

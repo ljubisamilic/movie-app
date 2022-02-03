@@ -11,12 +11,14 @@ const Movie = () => {
   const [loading, setLoading] = useState(true);
   const [favorite, setFavorite] = useState(false);
   const [movie, setMovie] = useState("");
-  let url = `http://localhost:5000/api/movie/${id}`;
-  if (user) {
-    url = `http://localhost:5000/api/movie/auth/${id}`;
-  }
+  const [alert, setAlert] = useState(false);
+
   useEffect(() => {
     const getMovie = async () => {
+      let url = `http://localhost:5000/api/movie/auth/${id}`;
+      if (!user) {
+        url = `http://localhost:5000/api/movie/single/${id}`;
+      }
       setLoading(true);
       try {
         const response = await axios.get(url, {
@@ -30,8 +32,10 @@ const Movie = () => {
         setLoading(false);
       }
     };
-    getMovie();
-  }, [id]);
+    setTimeout(() => {
+      getMovie();
+    }, 200);
+  }, []);
 
   const addToMyList = async (id) => {
     if (user) {
@@ -127,7 +131,12 @@ const Movie = () => {
           </p>
         </div>
         {!favorite ? (
-          <button className="btn" onClick={() => addToMyList(movieId)}>
+          <button
+            className="btn"
+            onClick={() => {
+              addToMyList(movieId);
+            }}
+          >
             Add to favorites
           </button>
         ) : (

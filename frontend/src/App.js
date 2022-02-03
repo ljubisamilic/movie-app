@@ -6,6 +6,8 @@ import Movie from "./pages/Movie";
 import MyList from "./pages/MyList";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
+import Search from "./pages/Search";
+import Upcoming from "./pages/Upcoming";
 import { useGlobalContext } from "./context";
 import axios from "axios";
 
@@ -44,6 +46,8 @@ function App() {
         <Route path="my-list" element={<MyList />} />
         <Route path="login" element={<Login />} />
         <Route path="register" element={<Register />} />
+        <Route path="search" element={<Search />} />
+        <Route path="upcoming" element={<Upcoming />} />
       </Routes>
     </BrowserRouter>
   );

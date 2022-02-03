@@ -5,7 +5,7 @@ const auth = require("../middleware/auth");
 const Movie = require("../models/movies");
 
 // get popular movies
-router.get("/", async (req, res) => {
+router.get("/popular", async (req, res) => {
   try {
     const page = req.query.page;
     const response = await axios.get(
@@ -33,7 +33,7 @@ router.get("/", async (req, res) => {
 });
 
 // get single movie
-router.get("/:id", async (req, res) => {
+router.get("/single/:id", async (req, res) => {
   try {
     const response = await axios.get(
       `https://api.themoviedb.org/3/movie/${req.params.id}?api_key=${process.env.MOVIE_API_KEY}&language=en-US`
@@ -92,6 +92,61 @@ router.get("/auth/:id", auth, async (req, res) => {
       favorite,
     };
     return res.status(200).json({ movie });
+  } catch (error) {
+    return res.status(400).json(error);
+  }
+});
+
+// search movie
+
+router.get("/search", async (req, res) => {
+  try {
+    const response = await axios.get(
+      `https://api.themoviedb.org/3/search/movie?api_key=${process.env.MOVIE_API_KEY}&query=${req.query.queryy}`
+    );
+    let movies = response.data.results.map((movie) => {
+      return {
+        id: movie.id,
+        original_title: movie.original_title,
+        overview: movie.overview,
+        poster_path: movie.poster_path,
+        release_date: movie.release_date,
+        vote_average: movie.vote_average,
+      };
+    });
+    return res.status(200).json({
+      page: response.data.page,
+      movies,
+      total_pages: response.data.total_pages,
+      total_results: response.data.total_results,
+    });
+  } catch (error) {
+    return res.status(400).json(error);
+  }
+});
+
+// upcoming movies
+router.get("/upcoming", async (req, res) => {
+  try {
+    const response = await axios.get(
+      `https://api.themoviedb.org/3/movie/upcoming?api_key=${process.env.MOVIE_API_KEY}&language=en-US&page=1`
+    );
+    let movies = response.data.results.map((movie) => {
+      return {
+        id: movie.id,
+        original_title: movie.original_title,
+        overview: movie.overview,
+        poster_path: movie.poster_path,
+        release_date: movie.release_date,
+        vote_average: movie.vote_average,
+      };
+    });
+    return res.status(200).json({
+      page: response.data.page,
+      movies,
+      total_pages: response.data.total_pages,
+      total_results: response.data.total_results,
+    });
   } catch (error) {
     return res.status(400).json(error);
   }

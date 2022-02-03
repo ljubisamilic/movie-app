@@ -1,21 +1,9 @@
 import React from "react";
-import { Link, useLocation } from "react-router-dom";
+import { Link } from "react-router-dom";
 
-const MovieCard = ({
-  id,
-  poster_path,
-  original_title,
-  vote_average,
-  removeFavMovie,
-}) => {
-  const location = useLocation().pathname;
+const MovieCard = ({ id, poster_path, original_title, vote_average }) => {
   return (
     <div className="movie-card">
-      {location === "/my-list" ? (
-        <button className="close" onClick={() => removeFavMovie(id)}>
-          X
-        </button>
-      ) : null}
       <div className="shadow"></div>
       <Link to={`/movie/${id}`}>
         <img

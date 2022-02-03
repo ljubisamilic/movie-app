@@ -4,9 +4,22 @@ const Movie = require("../models/movies");
 const auth = require("../middleware/auth");
 
 router.get("/", auth, async (req, res) => {
+  const page = parseInt(req.query.page);
+  const limit = parseInt(req.query.limit);
+
+  const startIndex = (page - 1) * limit;
+  const endIndex = page * limit;
+
+  const results = {};
+
+  results.total = await Movie.countDocuments().exec();
+
   try {
-    const movies = await Movie.find({ createdBy: req.user.id });
-    return res.status(200).json({ movies });
+    results.movies = await Movie.find({ createdBy: req.user.id })
+      .limit(limit)
+      .skip(startIndex)
+      .exec();
+    return res.status(200).json({ results });
   } catch (error) {
     return res.status(400).json(error);
   }
